@@ -47,9 +47,6 @@ This generates a `start.sh` script and a settings file with these default values
   "VELOCITY_SECRET": "",
   "PLAYER_RESTART": false, // make /restart command executable for all players
   "PLAYER_SHUTDOWN": false, // make /shutdown command executable for all players
-  "TPS": null, // default 20
-  "CHUNK_VIEW_DISTANCE": null, // default 8
-  "ENTITY_VIEW_DISTANCE": null, // default 5
   "TERMINAL_DISABLED": false // default false
 }
 ```
