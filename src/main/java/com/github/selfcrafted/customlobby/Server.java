@@ -21,13 +21,11 @@ public class Server {
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     public static void main(String[] args) throws IOException {
+        System.setProperty("minestom.tps", "5");
+        System.setProperty("minestom.chunk-view-distance", "2");
+        System.setProperty("minestom.entity-view-distance", "2");
+
         Settings.read();
-        if (Settings.getTps() != null)
-            System.setProperty("minestom.tps", Settings.getTps());
-        if (Settings.getChunkViewDistance() != null)
-            System.setProperty("minestom.chunk-view-distance", Settings.getChunkViewDistance());
-        if (Settings.getEntityViewDistance() != null)
-            System.setProperty("minestom.entity-view-distance", Settings.getEntityViewDistance());
         if (Settings.isTerminalDisabled())
             System.setProperty("minestom.terminal.disabled", "");
 

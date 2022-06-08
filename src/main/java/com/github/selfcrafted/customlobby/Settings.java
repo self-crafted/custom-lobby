@@ -46,9 +46,6 @@ public class Settings {
         private final boolean PLAYER_SHUTDOWN;
 
         // JVM arguments
-        private final String TPS;
-        private final String CHUNK_VIEW_DISTANCE;
-        private final String ENTITY_VIEW_DISTANCE;
         private final boolean TERMINAL_DISABLED;
 
         private SettingsState() {
@@ -61,9 +58,6 @@ public class Settings {
             this.PLAYER_RESTART = false;
             this.PLAYER_SHUTDOWN = false;
 
-            this.TPS = null;
-            this.CHUNK_VIEW_DISTANCE = null;
-            this.ENTITY_VIEW_DISTANCE = null;
             this.TERMINAL_DISABLED = false;
         }
 
@@ -110,8 +104,5 @@ public class Settings {
 
     public static boolean isAllowPlayerShutdown() { return currentSettings.PLAYER_SHUTDOWN; }
 
-    public static String getTps() { return currentSettings.TPS; }
-    public static String getChunkViewDistance() { return currentSettings.CHUNK_VIEW_DISTANCE; }
-    public static String getEntityViewDistance() { return currentSettings.ENTITY_VIEW_DISTANCE; }
     public static boolean isTerminalDisabled() { return currentSettings.TERMINAL_DISABLED; }
 }
