@@ -8,6 +8,7 @@ import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import net.minestom.server.instance.Instance;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class Server {
     public static final String VERSION = "&version";
     public static final String MINESTOM_VERSION = "&minestomVersion";
     private static final String START_SCRIPT_FILENAME = "start.sh";
+
+    private static Instance INSTANCE;
 
     public static void main(String[] args) throws IOException {
         System.setProperty("minestom.tps", "5");
@@ -49,13 +52,14 @@ public class Server {
             System.exit(0);
         }
 
-        // Actually start server
+        // Initialise server
         MinecraftServer server = MinecraftServer.init();
 
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerLoginEvent.class, event -> {
-            if (MinecraftServer.getInstanceManager().getInstances().isEmpty())
-                event.getPlayer().kick(Component.text("There is no instance available!", NamedTextColor.RED));
-        });
+        // Create lobby instance
+        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer();
+
+        var eventNode = MinecraftServer.getGlobalEventHandler();
+        eventNode.addListener(PlayerLoginEvent.class, event -> event.setSpawningInstance(INSTANCE));
 
         MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
         MinecraftServer.getCommandManager().register(Commands.RESTART);
@@ -79,6 +83,7 @@ public class Server {
         MinecraftServer.LOGGER.info("Running in " + Settings.getMode() + " mode.");
         MinecraftServer.LOGGER.info("Listening on " + Settings.getServerIp() + ":" + Settings.getServerPort());
 
+        // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
     }
 }
