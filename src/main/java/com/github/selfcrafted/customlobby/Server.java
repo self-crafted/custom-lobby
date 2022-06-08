@@ -39,8 +39,7 @@ public class Server {
         if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
 
         File startScriptFile = new File(START_SCRIPT_FILENAME);
-        if (startScriptFile.isDirectory()) MinecraftServer.LOGGER.warn("Can't create startup script!");
-        if (!startScriptFile.isFile()) {
+        if (!startScriptFile.exists()) {
             MinecraftServer.LOGGER.info("Create startup script.");
             Files.copy(
                     Objects.requireNonNull(Server.class.getClassLoader().getResourceAsStream(START_SCRIPT_FILENAME)),
