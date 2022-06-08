@@ -1,4 +1,4 @@
-package com.github.klainstom.microstom.commands;
+package com.github.selfcrafted.customlobby.commands;
 
 import net.minestom.server.command.builder.Command;
 

@@ -1,17 +1,16 @@
-# microstom
+# custom-lobby
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![GitHub](https://img.shields.io/github/license/KlainStom/microstom?style=flat-square)](https://github.com/KlainStom/microstom/blob/master/LICENSE)
-[![GitHub Repo stars](https://img.shields.io/github/stars/KlainStom/microstom?style=flat-square)](https://github.com/KlainStom/microstom/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/KlainStom/microstom?style=flat-square)](https://github.com/KlainStom/microstom/network/members)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/KlainStom/microstom?style=flat-square)](https://github.com/KlainStom/microstom/releases/latest)
-[![GitHub all releases](https://img.shields.io/github/downloads/KlainStom/microstom/total?style=flat-square)](https://github.com/KlainStom/microstom/releases)
+[![GitHub](https://img.shields.io/github/license/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/blob/master/LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/network/members)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/releases/latest)
+[![GitHub all releases](https://img.shields.io/github/downloads/self-crafted/custom-lobby/total?style=flat-square)](https://github.com/self-crafted/custom-lobby/releases)
 
-Microstom is a minimal minecraft server with [Minestom](https://github.com/Minestom/Minestom) as its core.
+custom-lobby is a small minecraft lobby server with [Minestom](https://github.com/Minestom/Minestom) as its core.
 
-Microstom seeks to be a minimal implementation of a Minestom server.
-So it should not include any feature that could have been implemented in an extension.
-Every piece of content has to be added as extension, (almost) nothing is there by default.
+custom-lobby is built for my private network, so it may or may not fit your needs.
+It includes a map, got only one instance and small gimmicks just for fun.
 
 ## Table of Contents
 
@@ -23,13 +22,13 @@ Every piece of content has to be added as extension, (almost) nothing is there b
 - [License](#license)
 
 ## Install
-You could either just download a [release](https://github.com/KlainStom/microstom/releases) or you compile the server yourself using the following commands under Linux
+You could either just download a [release](https://github.com/self-crafted/custom-lobby/releases) or you compile the server yourself using the following commands under Linux
 ```shell
-git clone https://github.com/KlainStom/microstom.git
-cd microstom
+git clone https://github.com/self-crafted/custom-lobby.git
+cd custom-lobby
 ./gradlew build
 ```
-The server jar will be located at `build/libs/Microstom-<VERSION>.jar`.
+The server jar will be located at `build/libs/custom-lobby-<VERSION>.jar`.
 
 Note that for compiling you need to use a JDK 17.
 
@@ -37,7 +36,7 @@ Note that for compiling you need to use a JDK 17.
 To run the server you need to have a Java 17 runtime installed.
 Use the following command to start the server for the first time.
 ```shell
-java -jar Microstom-<VERSION>.jar
+java -jar custom-lobby-<VERSION>.jar
 ```
 This generates a `start.sh` script and a settings file with these default values:
 ```json5
@@ -56,7 +55,8 @@ This generates a `start.sh` script and a settings file with these default values
 ```
 You have to restart the server for changes in there to take effect.
 
-Note that this server only supports 1.18.2 clients at version 5.0.0 and 1.18/1.18.1 at version 4.0.0. To allow other/multiple versions to connect you need to use a proxy with plugins like ViaVersion.
+Note that this server only supports 1.18.2 clients.
+You may need to use ViaVersion on the proxy.
 
 ## Restarting
 Restarting the server calls the `./start.sh` script.

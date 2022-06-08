@@ -4,10 +4,10 @@ plugins {
     java
 }
 
-var displayName = "Microstom"
+var displayName = "custom-lobby"
 
-group = "com.github.klainstom"
-version = "6.0.0-SNAPSHOT"
+group = "com.github.selfcrafted"
+version = "1.0.0-SNAPSHOT"
 
 dependencies {
     implementation(libs.minestom)
@@ -33,7 +33,7 @@ tasks {
 
     shadowJar {
         manifest {
-            attributes("Main-Class" to "com.github.klainstom.microstom.Server")
+            attributes("Main-Class" to "com.github.selfcrafted.customlobby.Server")
         }
         archiveBaseName.set(displayName)
         archiveClassifier.set("")

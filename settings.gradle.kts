@@ -12,5 +12,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "microstom"
+rootProject.name = "custom-lobby"
 

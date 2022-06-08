@@ -1,4 +1,4 @@
-package com.github.klainstom.microstom;
+package com.github.selfcrafted.customlobby;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
