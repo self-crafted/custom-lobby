@@ -1,7 +1,7 @@
 # custom-lobby
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![GitHub](https://img.shields.io/github/license/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/self-crafted/custom-lobby?style=flat-square&color=b2204c)](https://github.com/self-crafted/custom-lobby/blob/master/LICENSE)
 [![GitHub Repo stars](https://img.shields.io/github/stars/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/network/members)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/releases/latest)
