@@ -66,18 +66,14 @@ public class Server {
         MinecraftServer.getExtensionManager().setExtensionDataRoot(Path.of("config"));
 
         switch (Settings.getMode()) {
-            case OFFLINE:
-                break;
-            case ONLINE:
-                MojangAuth.init();
-                break;
-            case BUNGEECORD:
-                BungeeCordProxy.enable();
-                break;
-            case VELOCITY:
+            case OFFLINE -> {}
+            case ONLINE -> MojangAuth.init();
+            case BUNGEECORD -> BungeeCordProxy.enable();
+            case VELOCITY -> {
                 if (!Settings.hasVelocitySecret())
                     throw new IllegalArgumentException("The velocity secret is mandatory.");
                 VelocityProxy.enable(Settings.getVelocitySecret());
+            }
         }
 
         MinecraftServer.LOGGER.info("Running in " + Settings.getMode() + " mode.");
