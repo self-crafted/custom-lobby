@@ -1,14 +1,17 @@
 package com.github.selfcrafted.customlobby;
 
 import com.github.selfcrafted.customlobby.commands.Commands;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import com.github.selfcrafted.customlobby.instance.ReadOnlyAnvilLoader;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +25,7 @@ public class Server {
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     private static Instance INSTANCE;
+    private static Pos SPAWN;
 
     public static void main(String[] args) throws IOException {
         System.setProperty("minestom.tps", "5");
@@ -56,10 +60,25 @@ public class Server {
         MinecraftServer server = MinecraftServer.init();
 
         // Create lobby instance
-        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer();
+        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer(new ReadOnlyAnvilLoader());
+
+        TagHandler data = TagHandler.fromCompound(INSTANCE.getTag(Tag.Structure("Data", TagSerializer.COMPOUND)));
+        MinecraftServer.LOGGER.info(data.asCompound().toSNBT());
+        SPAWN = new Pos(data.getTag(Tag.Integer("SpawnX")),
+                data.getTag(Tag.Integer("SpawnY")) + 1,
+                data.getTag(Tag.Integer("SpawnZ")));
+
+        TagHandler gameRules = TagHandler.fromCompound(data.getTag(Tag.Structure("GameRules", TagSerializer.COMPOUND)));
+        if ("false".equals(gameRules.getTag(Tag.String("doDaylightCycle")))) {
+            INSTANCE.setTimeRate(0);
+            INSTANCE.setTime(-data.getTag(Tag.Long("Time")));
+        } else INSTANCE.setTime(data.getTag(Tag.Long("Time")));
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
-        eventNode.addListener(PlayerLoginEvent.class, event -> event.setSpawningInstance(INSTANCE));
+        eventNode.addListener(PlayerLoginEvent.class, event -> {
+            event.setSpawningInstance(INSTANCE);
+            event.getPlayer().setRespawnPoint(SPAWN);
+        });
 
         MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
         MinecraftServer.getCommandManager().register(Commands.RESTART);

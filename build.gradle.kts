@@ -23,12 +23,14 @@ tasks {
     }
 
     processResources {
-        expand(
-            mapOf(
-                "Name" to displayName,
-                "version" to version
+        filesMatching("start.sh") {
+            expand(
+                mapOf(
+                    "Name" to displayName,
+                    "version" to version
+                )
             )
-        )
+        }
     }
 
     shadowJar {
