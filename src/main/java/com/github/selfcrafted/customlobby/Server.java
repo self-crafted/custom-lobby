@@ -4,7 +4,12 @@ import com.github.selfcrafted.customlobby.commands.Commands;
 import com.github.selfcrafted.customlobby.instance.ReadOnlyAnvilLoader;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.entity.EntityDamageEvent;
+import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
@@ -79,6 +84,19 @@ public class Server {
             event.setSpawningInstance(INSTANCE);
             event.getPlayer().setRespawnPoint(SPAWN);
         });
+        eventNode.addListener(PlayerSpawnEvent.class, event -> event.getPlayer().setGameMode(GameMode.ADVENTURE));
+        eventNode.addListener(EntityDamageEvent.class, event -> {
+            if (event.getDamageType() != DamageType.VOID) return;
+            if (event.getEntity() instanceof Player player) {
+                player.teleport(SPAWN);
+                event.setCancelled(true);
+            }
+        });
+
+        eventNode.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(PlayerPreEatEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(PlayerStartDiggingEvent.class, event -> event.setCancelled(true));
 
         MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
         MinecraftServer.getCommandManager().register(Commands.RESTART);
