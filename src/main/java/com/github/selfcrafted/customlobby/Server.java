@@ -68,7 +68,6 @@ public class Server {
         INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer(new ReadOnlyAnvilLoader());
 
         TagHandler data = TagHandler.fromCompound(INSTANCE.getTag(Tag.Structure("Data", TagSerializer.COMPOUND)));
-        MinecraftServer.LOGGER.info(data.asCompound().toSNBT());
         SPAWN = new Pos(data.getTag(Tag.Integer("SpawnX")),
                 data.getTag(Tag.Integer("SpawnY")) + 1,
                 data.getTag(Tag.Integer("SpawnZ")));
