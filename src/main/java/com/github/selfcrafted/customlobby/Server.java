@@ -105,23 +105,22 @@ public class Server {
         FakePlayer.initPlayer(UUID.fromString("00000000-0000-4000-8000-000000000000"), "Fishing Steve",
                 new FakePlayerOption().setInTabList(false).setRegistered(false),
                 player -> {
-                    var playerPos = new Pos(91.0, 61.0, 89.1, 164.0F, 40.0F);
+                    // Fishing Steve
                     player.setTeam(NO_NAMES_TEAM);
-                    player.setView(playerPos.yaw(), playerPos.pitch());
+                    player.setView(164.0F, 40.0F);
                     player.getInventory().setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
 
                     // Seat
                     Entity seat = new Entity(EntityType.BAT);
                     seat.getEntityMeta().setInvisible(true);
-                    seat.setInstance(INSTANCE, playerPos.sub(0, 0.55, 0));
+                    seat.setInstance(INSTANCE, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
                     seat.addPassenger(player);
 
                     // Fishing hook
                     Entity hook = new Entity(EntityType.FISHING_BOBBER);
                     ((FishingHookMeta) hook.getEntityMeta()).setOwnerEntity(player);
                     hook.setNoGravity(true);
-                    hook.setInstance(INSTANCE, player.getTargetBlockPosition(5)
-                            .add(new Pos(0.5, 0.0, 0.5)));
+                    hook.setInstance(INSTANCE, new Pos(90.5, 60.875, 87.5));
                 });
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
