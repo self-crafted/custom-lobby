@@ -8,12 +8,9 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerOption;
 import net.minestom.server.entity.metadata.other.FishingHookMeta;
-import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.extras.MojangAuth;
@@ -133,12 +130,10 @@ public class Server {
             if (event.getPlayer() instanceof FakePlayer) return;
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         });
-        eventNode.addListener(EntityDamageEvent.class, event -> {
-            if (event.getDamageType() != DamageType.VOID) return;
-            if (event.getEntity() instanceof Player player) {
-                player.teleport(SPAWN);
-                event.setCancelled(true);
-            }
+        eventNode.addListener(PlayerMoveEvent.class, event -> {
+            var player = event.getPlayer();
+            if (player.getPosition().y() > 0) return;
+            player.teleport(SPAWN);
         });
 
         eventNode.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
