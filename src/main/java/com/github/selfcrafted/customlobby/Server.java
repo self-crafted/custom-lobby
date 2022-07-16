@@ -97,7 +97,7 @@ public class Server {
 
         SPAWN = new Pos(86, 61, 84);
         INSTANCE.setTimeRate(0);
-        INSTANCE.setTime(-6000L);
+        INSTANCE.setTime(-18000L);
 
         NO_NAMES_TEAM = new TeamBuilder("noNames", MinecraftServer.getTeamManager())
                 .nameTagVisibility(TeamsPacket.NameTagVisibility.NEVER).build();
