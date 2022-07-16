@@ -92,7 +92,7 @@ public class Server {
             }
         }, true));
 
-        SPAWN = new Pos(86, 61, 84);
+        SPAWN = new Pos(84.8, 61.0, 84.0, -30.3F, 0.0F);
         INSTANCE.setTimeRate(0);
         INSTANCE.setTime(-18000L);
 
