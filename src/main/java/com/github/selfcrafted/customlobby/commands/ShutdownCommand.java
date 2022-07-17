@@ -6,7 +6,7 @@ import net.minestom.server.command.ServerSender;
 import net.minestom.server.command.builder.Command;
 
 public class ShutdownCommand extends Command {
-    public ShutdownCommand() {
+    ShutdownCommand() {
         super("shutdown", "end", "stop");
         setCondition(((sender, commandString) -> (sender instanceof ServerSender)
                 || (sender instanceof ConsoleSender)
