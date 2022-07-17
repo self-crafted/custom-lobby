@@ -42,9 +42,6 @@ public class Settings {
         private final RunMode MODE;
         private final String VELOCITY_SECRET;
 
-        private final boolean PLAYER_RESTART;
-        private final boolean PLAYER_SHUTDOWN;
-
         // JVM arguments
         private final boolean TERMINAL_DISABLED;
 
@@ -54,9 +51,6 @@ public class Settings {
 
             this.MODE = RunMode.OFFLINE;
             this.VELOCITY_SECRET = "";
-
-            this.PLAYER_RESTART = false;
-            this.PLAYER_SHUTDOWN = false;
 
             this.TERMINAL_DISABLED = false;
         }
@@ -99,10 +93,6 @@ public class Settings {
     public static String getVelocitySecret() {
         return currentSettings.VELOCITY_SECRET;
     }
-
-    public static boolean isAllowPlayerRestart() { return currentSettings.PLAYER_RESTART; }
-
-    public static boolean isAllowPlayerShutdown() { return currentSettings.PLAYER_SHUTDOWN; }
 
     public static boolean isTerminalDisabled() { return currentSettings.TERMINAL_DISABLED; }
 }

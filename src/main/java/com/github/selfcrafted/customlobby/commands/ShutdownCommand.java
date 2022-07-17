@@ -1,6 +1,5 @@
 package com.github.selfcrafted.customlobby.commands;
 
-import com.github.selfcrafted.customlobby.Settings;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.ServerSender;
@@ -11,7 +10,8 @@ public class ShutdownCommand extends Command {
         super("shutdown", "end", "stop");
         setCondition(((sender, commandString) -> (sender instanceof ServerSender)
                 || (sender instanceof ConsoleSender)
-                || Settings.isAllowPlayerShutdown()));
+                || sender.hasPermission("admin.shutdown")
+        ));
         addSyntax(((sender, context) -> MinecraftServer.stopCleanly()));
     }
 }

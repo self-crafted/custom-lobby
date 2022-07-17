@@ -1,6 +1,5 @@
 package com.github.selfcrafted.customlobby.commands;
 
-import com.github.selfcrafted.customlobby.Settings;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.ServerSender;
@@ -13,7 +12,8 @@ public class RestartCommand extends Command {
         super("restart");
         setCondition(((sender, commandString) -> (sender instanceof ServerSender)
                 || (sender instanceof ConsoleSender)
-                || Settings.isAllowPlayerRestart()));
+                || sender.hasPermission("admin.restart")
+        ));
         addSyntax((sender, context) -> {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
