@@ -166,9 +166,16 @@ public class Server {
         server.start(Settings.getServerIp(), Settings.getServerPort());
     }
 
+    /**
+     * @return The InstanceContainer of the lobby instance
+     */
     public static InstanceContainer getLobby() {
         return LOBBY;
     }
+
+    /**
+     * @return The spawn point for all players in the lobby
+     */
     public static Pos getSpawn() {
         return SPAWN;
     }
