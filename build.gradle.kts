@@ -16,11 +16,11 @@ dependencies {
 
 tasks {
     blossom {
-        replaceToken("&NAME", displayName.toUpperCase())
-        replaceToken("&Name", displayName)
-        replaceToken("&name", displayName.toLowerCase())
-        replaceToken("&version", version)
-        replaceToken("&minestomVersion", libs.versions.minestom.get())
+        val server = "src/main/java/com/github/selfcrafted/customlobby/Server.java"
+
+        replaceToken("&Name", displayName, server)
+        replaceToken("&version", version, server)
+        replaceToken("&minestomVersion", libs.versions.minestom.get(), server)
     }
 
     processResources {
