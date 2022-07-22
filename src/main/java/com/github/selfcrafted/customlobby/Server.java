@@ -22,6 +22,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -75,8 +77,13 @@ public class Server {
         // Initialise server
         MinecraftServer server = MinecraftServer.init();
 
+        var fullBrightDimensionType = DimensionType.builder(NamespaceID.from("selfcrafted:lobby"))
+                .ambientLight(2.0f)
+                .build();
+        MinecraftServer.getDimensionTypeManager().addDimension(fullBrightDimensionType);
+
         // Create lobby instance
-        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer();
+        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
         INSTANCE.setChunkLoader(new SlimeLoader(INSTANCE, new SlimeSource() {
             @NotNull
             @Override
