@@ -10,7 +10,7 @@ public class Settings {
             .setPrettyPrinting()
             .serializeNulls()
             .create();
-    private static final File settingsFile = new File("micro-settings.json");
+    private static final File settingsFile = new File("./config/custom-lobby.json");
 
     private static SettingsState currentSettings = null;
 
@@ -30,6 +30,7 @@ public class Settings {
 
     public static void write() throws IOException {
         String json = gson.toJson(currentSettings);
+        settingsFile.getParentFile().mkdirs();
         Writer writer = new FileWriter(settingsFile);
         writer.write(json);
         writer.close();
