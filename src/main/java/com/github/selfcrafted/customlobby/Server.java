@@ -20,7 +20,6 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
-import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
@@ -42,8 +41,6 @@ public class Server {
 
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
-
-    private static Team NO_NAMES_TEAM;
 
     public static void main(String[] args) throws IOException {
         System.setProperty("minestom.tps", "5");
@@ -103,14 +100,13 @@ public class Server {
         LOBBY.setTimeRate(0);
         LOBBY.setTime(-18000L);
 
-        NO_NAMES_TEAM = new TeamBuilder("noNames", MinecraftServer.getTeamManager())
-                .nameTagVisibility(TeamsPacket.NameTagVisibility.NEVER).build();
-
         FakePlayer.initPlayer(UUID.fromString("00000000-0000-4000-8000-000000000000"), "Fishing Steve",
                 new FakePlayerOption().setInTabList(false).setRegistered(false),
                 player -> {
                     // Fishing Steve
-                    player.setTeam(NO_NAMES_TEAM);
+                    var team = new TeamBuilder("noNames", MinecraftServer.getTeamManager())
+                            .nameTagVisibility(TeamsPacket.NameTagVisibility.NEVER).build();
+                    player.setTeam(team);
                     player.setView(164.0F, 40.0F);
                     player.getInventory().setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
 
