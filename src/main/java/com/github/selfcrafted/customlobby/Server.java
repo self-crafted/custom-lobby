@@ -40,7 +40,7 @@ public class Server {
     public static final String MINESTOM_VERSION = "&minestomVersion";
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
-    public static InstanceContainer LOBBY;
+    private static InstanceContainer LOBBY;
     private static Pos SPAWN;
 
     private static Team NO_NAMES_TEAM;
@@ -168,5 +168,12 @@ public class Server {
 
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
+    }
+
+    public static InstanceContainer getLobby() {
+        return LOBBY;
+    }
+    public static Pos getSpawn() {
+        return SPAWN;
     }
 }
