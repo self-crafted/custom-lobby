@@ -40,7 +40,7 @@ public class Server {
     public static final String MINESTOM_VERSION = "&minestomVersion";
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
-    private static InstanceContainer INSTANCE;
+    public static InstanceContainer LOBBY;
     private static Pos SPAWN;
 
     private static Team NO_NAMES_TEAM;
@@ -83,8 +83,8 @@ public class Server {
         MinecraftServer.getDimensionTypeManager().addDimension(fullBrightDimensionType);
 
         // Create lobby instance
-        INSTANCE = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
-        INSTANCE.setChunkLoader(new SlimeLoader(INSTANCE, new SlimeSource() {
+        LOBBY = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
+        LOBBY.setChunkLoader(new SlimeLoader(LOBBY, new SlimeSource() {
             @NotNull
             @Override
             public InputStream load() {
@@ -100,8 +100,8 @@ public class Server {
         }, true));
 
         SPAWN = new Pos(84.8, 61.0, 84.0, -30.3F, 0.0F);
-        INSTANCE.setTimeRate(0);
-        INSTANCE.setTime(-18000L);
+        LOBBY.setTimeRate(0);
+        LOBBY.setTime(-18000L);
 
         NO_NAMES_TEAM = new TeamBuilder("noNames", MinecraftServer.getTeamManager())
                 .nameTagVisibility(TeamsPacket.NameTagVisibility.NEVER).build();
@@ -117,23 +117,23 @@ public class Server {
                     // Seat
                     Entity seat = new Entity(EntityType.BAT);
                     seat.getEntityMeta().setInvisible(true);
-                    seat.setInstance(INSTANCE, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
+                    seat.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
                     seat.addPassenger(player);
 
                     // Fishing hook
                     Entity hook = new Entity(EntityType.FISHING_BOBBER);
                     ((FishingHookMeta) hook.getEntityMeta()).setOwnerEntity(player);
                     hook.setNoGravity(true);
-                    hook.setInstance(INSTANCE, new Pos(90.5, 60.875, 87.5));
+                    hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
                 });
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
         eventNode.addListener(PlayerLoginEvent.class, event -> {
-            event.setSpawningInstance(INSTANCE);
+            event.setSpawningInstance(LOBBY);
             event.getPlayer().setRespawnPoint(SPAWN);
         });
         eventNode.addListener(PlayerSpawnEvent.class, event -> {
-            if (event.getSpawnInstance() != INSTANCE) return;
+            if (event.getSpawnInstance() != LOBBY) return;
             if (event.getPlayer() instanceof FakePlayer) return;
             event.getPlayer().setGameMode(GameMode.ADVENTURE);
         });
