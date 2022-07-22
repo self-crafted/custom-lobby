@@ -38,15 +38,14 @@ Use the following command to start the server for the first time.
 ```shell
 java -jar custom-lobby-<VERSION>.jar
 ```
-This generates a `start.sh` script and a settings file with these default values:
+This generates a `start.sh` script and a settings file.
+The settings are located at `./config/custom-lobby.json` with these default values:
 ```json5
 {
   "SERVER_IP": "localhost",
   "SERVER_PORT": 25565,
   "MODE": "OFFLINE", // may be OFFLINE, ONLINE, BUNGEECORD or VELOCITY
   "VELOCITY_SECRET": "",
-  "PLAYER_RESTART": false, // make /restart command executable for all players
-  "PLAYER_SHUTDOWN": false, // make /shutdown command executable for all players
   "TERMINAL_DISABLED": false // default false
 }
 ```
