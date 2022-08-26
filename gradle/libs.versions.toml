@@ -2,7 +2,7 @@ metadata.format.version = "1.1"
 
 [versions]
 
-minestom = "d596992c0e"
+minestom = "f5f323fef9"
 slimeloader = "9f6bc4545a"
 
 # Gradle plugins
