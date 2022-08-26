@@ -108,6 +108,7 @@ public class Server {
                     // Seat
                     Entity seat = new Entity(EntityType.BAT);
                     seat.getEntityMeta().setInvisible(true);
+                    seat.getEntityMeta().setHasNoGravity(true);
                     seat.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
                     seat.addPassenger(player);
 
