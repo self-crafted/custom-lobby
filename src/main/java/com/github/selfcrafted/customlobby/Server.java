@@ -42,7 +42,6 @@ public class Server {
     private static Pos SPAWN;
 
     public static void main(String[] args) throws IOException {
-        System.setProperty("minestom.tps", "5");
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
 
