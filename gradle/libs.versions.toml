@@ -3,7 +3,6 @@ metadata.format.version = "1.1"
 [versions]
 
 minestom = "f5f323fef9"
-slimeloader = "9f6bc4545a"
 tntloader = "ecda3972cb"
 
 kotlin-coroutines = "1.6.4"
@@ -15,7 +14,6 @@ shadowJar = "7.0.0"
 [libraries]
 
 minestom = { group = "com.github.Minestom", name = "Minestom", version.ref = "minestom" }
-slimeloader = { group = "com.github.CatDevz", name = "SlimeLoader", version.ref = "slimeloader" }
 tntloader = { group = "com.github.EmortalMC", name = "TNT", version.ref = "tntloader" }
 
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core" , version.ref = "kotlin-coroutines" }
