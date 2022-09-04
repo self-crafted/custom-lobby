@@ -124,9 +124,11 @@ public class Server {
             event.getPlayer().setRespawnPoint(SPAWN);
         });
         eventNode.addListener(PlayerSpawnEvent.class, event -> {
+            var player = event.getPlayer();
             if (event.getSpawnInstance() != LOBBY) return;
-            if (event.getPlayer() instanceof FakePlayer) return;
-            event.getPlayer().setGameMode(GameMode.ADVENTURE);
+            if (player instanceof FakePlayer) return;
+            player.setGameMode(GameMode.ADVENTURE);
+            player.setNoGravity(false);
         });
         eventNode.addListener(PlayerMoveEvent.class, event -> {
             var player = event.getPlayer();
