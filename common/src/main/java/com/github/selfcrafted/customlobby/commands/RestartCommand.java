@@ -17,7 +17,7 @@ public class RestartCommand extends Command {
         addSyntax((sender, context) -> {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    new ProcessBuilder("./start.sh").start();
+                    new ProcessBuilder("start.sh").start();
                     MinecraftServer.LOGGER.info("Start new server.");
                 } catch (IOException e) {
                     if (!(sender instanceof ConsoleSender)) sender.sendMessage("Could not restart server.");

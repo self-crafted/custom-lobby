@@ -25,10 +25,8 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,7 +34,6 @@ import java.util.UUID;
 public class Server {
     public static final String VERSION = "&version";
     public static final String MINESTOM_VERSION = "&minestomVersion";
-    private static final String START_SCRIPT_FILENAME = "start.sh";
 
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
@@ -44,10 +41,6 @@ public class Server {
     public static void main(String[] args) throws IOException {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
-
-        Settings.read();
-        if (Settings.isTerminalDisabled())
-            System.setProperty("minestom.terminal.disabled", "");
 
         MinecraftServer.LOGGER.info("====== VERSIONS ======");
         MinecraftServer.LOGGER.info("Java: " + Runtime.version());
@@ -57,17 +50,6 @@ public class Server {
         MinecraftServer.LOGGER.info("======================");
 
         if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
-
-        File startScriptFile = new File(START_SCRIPT_FILENAME);
-        if (!startScriptFile.exists()) {
-            MinecraftServer.LOGGER.info("Create startup script.");
-            Files.copy(
-                    Objects.requireNonNull(Server.class.getClassLoader().getResourceAsStream(START_SCRIPT_FILENAME)),
-                    startScriptFile.toPath());
-            Runtime.getRuntime().exec("chmod u+x start.sh");
-            MinecraftServer.LOGGER.info("Use './start.sh' to start the server.");
-            System.exit(0);
-        }
 
         // Initialise server
         MinecraftServer server = MinecraftServer.init();

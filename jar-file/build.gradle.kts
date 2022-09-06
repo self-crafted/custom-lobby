@@ -4,22 +4,22 @@ plugins {
     java
 }
 
-var displayName = "custom-lobby"
-
-group = "com.github.selfcrafted"
-version = "1.1.0-SNAPSHOT"
+group = project.properties["maven_group"]!!
+version = project.properties["maven_version"]!!
 
 dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.minestom)
     implementation(libs.tntloader)
+
+    implementation(projects.common)
 }
 
 tasks {
     blossom {
         val server = "src/main/java/com/github/selfcrafted/customlobby/Server.java"
 
-        replaceToken("&Name", displayName, server)
+        replaceToken("&Name", rootProject.name, server)
         replaceToken("&version", version, server)
         replaceToken("&minestomVersion", libs.versions.minestom.get(), server)
     }
@@ -28,7 +28,7 @@ tasks {
         filesMatching("start.sh") {
             expand(
                 mapOf(
-                    "Name" to displayName,
+                    "Name" to rootProject.name,
                     "version" to version
                 )
             )
@@ -37,9 +37,9 @@ tasks {
 
     shadowJar {
         manifest {
-            attributes("Main-Class" to "com.github.selfcrafted.customlobby.Server")
+            attributes("Main-Class" to "com.github.selfcrafted.customlobby.preboot.JarPreboot")
         }
-        archiveBaseName.set(displayName)
+        archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
         archiveVersion.set(project.version.toString())
         mergeServiceFiles()

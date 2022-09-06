@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -11,6 +13,10 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+include("common")
+include("jar-file")
+include("oci-container")
 
 rootProject.name = "custom-lobby"
 
