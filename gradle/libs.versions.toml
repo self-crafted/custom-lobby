@@ -10,6 +10,7 @@ kotlin-coroutines = "1.6.4"
 # Gradle plugins
 blossom = "1.3.0"
 shadowJar = "7.0.0"
+oci-container = "3.3.0"
 
 [libraries]
 
@@ -24,3 +25,4 @@ kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutine
 
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 shadowJar = { id = "com.github.johnrengelman.shadow", version.ref = "shadowJar" }
+oci-container = { id = "com.google.cloud.tools.jib", version.ref = "oci-container" }
