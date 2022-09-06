@@ -38,18 +38,9 @@ public class Server {
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
 
-    public static void main(String[] args) throws IOException {
+    public static void start(Settings settings) throws IOException {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
-
-        MinecraftServer.LOGGER.info("====== VERSIONS ======");
-        MinecraftServer.LOGGER.info("Java: " + Runtime.version());
-        MinecraftServer.LOGGER.info("&Name: " + VERSION);
-        MinecraftServer.LOGGER.info("Minestom: " + MINESTOM_VERSION);
-        MinecraftServer.LOGGER.info("Supported protocol: %d (%s)".formatted(MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME));
-        MinecraftServer.LOGGER.info("======================");
-
-        if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
 
         // Initialise server
         MinecraftServer server = MinecraftServer.init();
@@ -127,22 +118,22 @@ public class Server {
         MinecraftServer.getCommandManager().register(Commands.RESTART);
         MinecraftServer.getExtensionManager().setExtensionDataRoot(Path.of("config"));
 
-        switch (Settings.getMode()) {
+        switch (settings.getMode()) {
             case OFFLINE -> {}
             case ONLINE -> MojangAuth.init();
             case BUNGEECORD -> BungeeCordProxy.enable();
             case VELOCITY -> {
-                if (!Settings.hasVelocitySecret())
+                if (!settings.hasVelocitySecret())
                     throw new IllegalArgumentException("The velocity secret is mandatory.");
-                VelocityProxy.enable(Settings.getVelocitySecret());
+                VelocityProxy.enable(settings.getVelocitySecret());
             }
         }
 
-        MinecraftServer.LOGGER.info("Running in " + Settings.getMode() + " mode.");
-        MinecraftServer.LOGGER.info("Listening on " + Settings.getServerIp() + ":" + Settings.getServerPort());
+        MinecraftServer.LOGGER.info("Running in " + settings.getMode() + " mode.");
+        MinecraftServer.LOGGER.info("Listening on " + settings.getServerIp() + ":" + settings.getServerPort());
 
         // Start server
-        server.start(Settings.getServerIp(), Settings.getServerPort());
+        server.start(settings.getServerIp(), settings.getServerPort());
     }
 
     /**

@@ -34,7 +34,7 @@ tasks {
         }
         container {
             jvmFlags = listOf("-Xms512M", "-Xmx512M")
-            mainClass = "com.github.selfcrafted.customlobby.preboot.OciPreboot"
+            mainClass = "com.github.selfcrafted.customlobby.oci.Preboot"
             args = listOf()
             ports = listOf("25565/tcp")
             environment = mapOf(

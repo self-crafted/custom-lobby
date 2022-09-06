@@ -37,7 +37,7 @@ tasks {
 
     shadowJar {
         manifest {
-            attributes("Main-Class" to "com.github.selfcrafted.customlobby.preboot.JarPreboot")
+            attributes("Main-Class" to "com.github.selfcrafted.customlobby.jar.Preboot")
         }
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")

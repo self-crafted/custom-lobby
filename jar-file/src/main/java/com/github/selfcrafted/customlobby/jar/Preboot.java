@@ -1,4 +1,4 @@
-package com.github.selfcrafted.customlobby.preboot;
+package com.github.selfcrafted.customlobby.jar;
 
 import com.github.selfcrafted.customlobby.Server;
 import com.github.selfcrafted.customlobby.Settings;
@@ -9,18 +9,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Objects;
 
-public class JarPreboot {
+public class Preboot {
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     public static void main(String[] args) throws IOException {
-        // TODO: 06.09.22 execute before starting the server
+        MinecraftServer.LOGGER.info("====== VERSIONS ======");
+        MinecraftServer.LOGGER.info("Java: " + Runtime.version());
+        MinecraftServer.LOGGER.info("&Name: " + Server.VERSION);
+        MinecraftServer.LOGGER.info("Minestom: " + Server.MINESTOM_VERSION);
+        MinecraftServer.LOGGER.info("Supported protocol: %d (%s)".formatted(MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME));
+        MinecraftServer.LOGGER.info("======================");
 
-        Settings.read();
-        if (Settings.isTerminalDisabled())
-            System.setProperty("minestom.terminal.disabled", "");
+        if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
 
         File startScriptFile = new File(START_SCRIPT_FILENAME);
-        if (!startScriptFile.exists() && !System.getenv("IS_CONTAINER").equals("true")) {
+        if (!startScriptFile.exists()) {
             MinecraftServer.LOGGER.info("Create startup script.");
             Files.copy(
                     Objects.requireNonNull(Server.class.getClassLoader().getResourceAsStream(START_SCRIPT_FILENAME)),
@@ -30,6 +33,11 @@ public class JarPreboot {
             System.exit(0);
         }
 
-        Server.main(args);
+        Settings settings = new JsonSettings();
+        settings.read();
+        if (settings.isTerminalDisabled())
+            System.setProperty("minestom.terminal.disabled", "");
+
+        Server.start(settings);
     }
 }
