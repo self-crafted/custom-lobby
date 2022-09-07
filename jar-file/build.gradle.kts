@@ -17,11 +17,8 @@ dependencies {
 
 tasks {
     blossom {
-        val server = "src/main/java/com/github/selfcrafted/customlobby/Server.java"
-
-        replaceToken("&Name", rootProject.name, server)
-        replaceToken("&version", version, server)
-        replaceToken("&minestomVersion", libs.versions.minestom.get(), server)
+        replaceToken("&Name", rootProject.name,
+            "src/main/java/com/github/selfcrafted/customlobby/jar/Preboot.java")
     }
 
     processResources {
