@@ -2,7 +2,7 @@ metadata.format.version = "1.1"
 
 [versions]
 
-minestom = "f5f323fef9"
+minestom = "fc90fe8852"
 tntloader = "ecda3972cb"
 
 kotlin-coroutines = "1.6.4"
