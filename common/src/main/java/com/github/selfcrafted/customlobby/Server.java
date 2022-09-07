@@ -113,6 +113,7 @@ public class Server {
         MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
         MinecraftServer.getCommandManager().register(Commands.RESTART);
         MinecraftServer.getExtensionManager().setExtensionDataRoot(Path.of("config"));
+        MinecraftServer.setBrandName("custom-lobby");
 
         switch (settings.getMode()) {
             case OFFLINE -> {}
