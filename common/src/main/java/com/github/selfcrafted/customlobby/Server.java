@@ -39,9 +39,6 @@ public class Server {
     private static Pos SPAWN;
 
     public static void start(Settings settings) throws IOException {
-        System.setProperty("minestom.chunk-view-distance", "2");
-        System.setProperty("minestom.entity-view-distance", "2");
-
         // Initialise server
         MinecraftServer server = MinecraftServer.init();
 

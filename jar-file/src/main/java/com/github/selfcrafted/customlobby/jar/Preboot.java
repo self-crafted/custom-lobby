@@ -13,6 +13,14 @@ public class Preboot {
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     public static void main(String[] args) throws IOException {
+        Settings settings = new JsonSettings();
+        settings.read();
+        if (settings.isTerminalDisabled())
+            System.setProperty("minestom.terminal.disabled", "");
+
+        System.setProperty("minestom.chunk-view-distance", "2");
+        System.setProperty("minestom.entity-view-distance", "2");
+
         MinecraftServer.LOGGER.info("====== VERSIONS ======");
         MinecraftServer.LOGGER.info("Java: " + Runtime.version());
         MinecraftServer.LOGGER.info("&Name: " + Server.VERSION);
@@ -32,11 +40,6 @@ public class Preboot {
             MinecraftServer.LOGGER.info("Use './start.sh' to start the server.");
             System.exit(0);
         }
-
-        Settings settings = new JsonSettings();
-        settings.read();
-        if (settings.isTerminalDisabled())
-            System.setProperty("minestom.terminal.disabled", "");
 
         Server.start(settings);
     }

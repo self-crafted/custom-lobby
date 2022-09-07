@@ -7,6 +7,10 @@ import java.io.IOException;
 
 public class Preboot {
     public static void main(String[] args) throws IOException {
+        System.setProperty("minestom.chunk-view-distance", "2");
+        System.setProperty("minestom.entity-view-distance", "2");
+        System.setProperty("minestom.terminal.disabled", "");
+
         MinecraftServer.LOGGER.info("====== VERSIONS ======");
         MinecraftServer.LOGGER.info("Java: " + Runtime.version());
         MinecraftServer.LOGGER.info("&Name: " + Server.VERSION);
@@ -16,7 +20,6 @@ public class Preboot {
 
         EnvironmentSettings settings = new EnvironmentSettings();
         settings.read();
-        System.setProperty("minestom.terminal.disabled", "");
 
         Server.start(settings);
     }
