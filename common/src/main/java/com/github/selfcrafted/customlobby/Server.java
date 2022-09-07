@@ -25,7 +25,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -38,7 +37,7 @@ public class Server {
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
 
-    public static void start(Settings settings) throws IOException {
+    public static void start(Settings settings) {
         // Initialise server
         MinecraftServer server = MinecraftServer.init();
 
