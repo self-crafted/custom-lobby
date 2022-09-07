@@ -1,6 +1,5 @@
 package com.github.selfcrafted.customlobby;
 
-import com.github.selfcrafted.customlobby.commands.Commands;
 import dev.emortal.tnt.TNTLoader;
 import dev.emortal.tnt.source.TNTSource;
 import net.minestom.server.MinecraftServer;
@@ -37,10 +36,7 @@ public class Server {
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
 
-    public static void start(Settings settings) {
-        // Initialise server
-        MinecraftServer server = MinecraftServer.init();
-
+    public static void start(Settings settings, MinecraftServer server) {
         var fullBrightDimensionType = DimensionType.builder(NamespaceID.from("selfcrafted:lobby"))
                 .ambientLight(2.0f)
                 .build();
@@ -110,8 +106,6 @@ public class Server {
         eventNode.addListener(PlayerPreEatEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerStartDiggingEvent.class, event -> event.setCancelled(true));
 
-        MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
-        MinecraftServer.getCommandManager().register(Commands.RESTART);
         MinecraftServer.getExtensionManager().setExtensionDataRoot(Path.of("config"));
         MinecraftServer.setBrandName("custom-lobby");
 

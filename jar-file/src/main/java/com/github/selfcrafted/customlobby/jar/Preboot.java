@@ -2,6 +2,7 @@ package com.github.selfcrafted.customlobby.jar;
 
 import com.github.selfcrafted.customlobby.Server;
 import com.github.selfcrafted.customlobby.Settings;
+import com.github.selfcrafted.customlobby.commands.Commands;
 import net.minestom.server.MinecraftServer;
 
 import java.io.File;
@@ -41,6 +42,12 @@ public class Preboot {
             System.exit(0);
         }
 
-        Server.start(settings);
+        // Initialise server
+        MinecraftServer server = MinecraftServer.init();
+
+        MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
+        MinecraftServer.getCommandManager().register(Commands.RESTART);
+
+        Server.start(settings, server);
     }
 }

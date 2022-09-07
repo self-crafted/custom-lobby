@@ -1,6 +1,7 @@
 package com.github.selfcrafted.customlobby.oci;
 
 import com.github.selfcrafted.customlobby.Server;
+import com.github.selfcrafted.customlobby.commands.Commands;
 import net.minestom.server.MinecraftServer;
 
 public class Preboot {
@@ -19,6 +20,11 @@ public class Preboot {
         EnvironmentSettings settings = new EnvironmentSettings();
         settings.read();
 
-        Server.start(settings);
+        // Initialise server
+        MinecraftServer server = MinecraftServer.init();
+
+        MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
+
+        Server.start(settings, server);
     }
 }
