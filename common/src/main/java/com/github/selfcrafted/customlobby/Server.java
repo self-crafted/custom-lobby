@@ -47,6 +47,7 @@ public class Server {
         LOBBY.setChunkLoader(new TNTLoader(LOBBY, new TNTSource() {
             @Override
             public @NotNull InputStream load() {
+                // FIXME: 07.09.22 world is still in 1.18.2 format (TNT in deprecated...)
                 return Objects.requireNonNull(getClass().getResourceAsStream("/lobby.tnt"),
                         "TNT world missing!");
             }
