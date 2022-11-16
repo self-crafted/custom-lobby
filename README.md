@@ -51,7 +51,7 @@ The settings are located at `./config/custom-lobby.json` with these default valu
 ```
 You have to restart the server for changes in there to take effect.
 
-Note that this server only supports 1.18.2 clients.
+Note that the newest version of this server only supports 1.19.2 clients.
 You may need to use ViaVersion on the proxy.
 
 ## Restarting
