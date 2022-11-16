@@ -10,10 +10,8 @@ group = "com.github.selfcrafted"
 version = "1.1.0-SNAPSHOT"
 
 dependencies {
-    implementation(libs.kotlin.coroutines)
     implementation(libs.minestom)
     implementation(libs.slimeloader)
-    implementation(libs.tntloader)
 }
 
 tasks {

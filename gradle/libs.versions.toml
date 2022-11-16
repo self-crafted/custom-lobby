@@ -4,9 +4,6 @@ metadata.format.version = "1.1"
 
 minestom = "f5f323fef9"
 slimeloader = "9f6bc4545a"
-tntloader = "ecda3972cb"
-
-kotlin-coroutines = "1.6.4"
 
 # Gradle plugins
 blossom = "1.3.0"
@@ -16,9 +13,6 @@ shadowJar = "7.0.0"
 
 minestom = { group = "com.github.Minestom", name = "Minestom", version.ref = "minestom" }
 slimeloader = { group = "com.github.CatDevz", name = "SlimeLoader", version.ref = "slimeloader" }
-tntloader = { group = "com.github.EmortalMC", name = "TNT", version.ref = "tntloader" }
-
-kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core" , version.ref = "kotlin-coroutines" }
 
 [bundles]
 
