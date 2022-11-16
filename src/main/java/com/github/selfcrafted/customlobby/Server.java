@@ -171,14 +171,14 @@ public class Server {
     /**
      * @return The InstanceContainer of the lobby instance
      */
-    public static InstanceContainer getLobby() {
+    public static InstanceContainer lobby() {
         return LOBBY;
     }
 
     /**
      * @return The spawn point for all players in the lobby
      */
-    public static Pos getSpawn() {
+    public static Pos spawn() {
         return SPAWN;
     }
 }
