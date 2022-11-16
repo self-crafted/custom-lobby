@@ -1,8 +1,8 @@
 package com.github.selfcrafted.customlobby;
 
 import com.github.selfcrafted.customlobby.commands.Commands;
-import dev.emortal.tnt.TNTLoader;
-import dev.emortal.tnt.source.TNTSource;
+import gg.astromc.slimeloader.loader.SlimeLoader;
+import gg.astromc.slimeloader.source.SlimeSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -79,16 +80,20 @@ public class Server {
 
         // Create lobby instance
         LOBBY = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
-        LOBBY.setChunkLoader(new TNTLoader(LOBBY, new TNTSource() {
+        LOBBY.setChunkLoader(new SlimeLoader(LOBBY, new SlimeSource() {
+            @NotNull
             @Override
-            public @NotNull InputStream load() {
-                return Objects.requireNonNull(getClass().getResourceAsStream("/lobby.tnt"),
-                        "TNT world missing!");
+            public InputStream load() {
+                return Objects.requireNonNull(getClass().getResourceAsStream("/lobby.slime"),
+                        "Slime world missing!");
             }
 
+            @NotNull
             @Override
-            public void save(byte[] bytes) { }
-        }, Pos.ZERO));
+            public OutputStream save() {
+                return null;
+            }
+        }, true));
 
         SPAWN = new Pos(84.8, 61.0, 84.0, -30.3F, 0.0F);
         LOBBY.setTimeRate(0);
