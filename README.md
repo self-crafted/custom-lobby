@@ -65,7 +65,7 @@ This server itself does not add some API. But it features [Minestom's API](https
 
 ## Maintainers
 
-[@off-by-0point5](https://github.com/off-by-0point5)
+[@offby0point5](https://github.com/offby0point5)
 
 ## Contributing
 
