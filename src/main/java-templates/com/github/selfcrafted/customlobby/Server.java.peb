@@ -35,8 +35,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Server {
-    public static final String VERSION = "&version";
-    public static final String MINESTOM_VERSION = "&minestomVersion";
+    public static final String VERSION = "{{ version }}";
+    public static final String MINESTOM_VERSION = "{{ minestomVersion }}";
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     private static InstanceContainer LOBBY;
@@ -52,7 +52,7 @@ public class Server {
 
         MinecraftServer.LOGGER.info("====== VERSIONS ======");
         MinecraftServer.LOGGER.info("Java: " + Runtime.version());
-        MinecraftServer.LOGGER.info("&Name: " + VERSION);
+        MinecraftServer.LOGGER.info("{{ Name }}: " + VERSION);
         MinecraftServer.LOGGER.info("Minestom: " + MINESTOM_VERSION);
         MinecraftServer.LOGGER.info("Supported protocol: %d (%s)".formatted(MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME));
         MinecraftServer.LOGGER.info("======================");

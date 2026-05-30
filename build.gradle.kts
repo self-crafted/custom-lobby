@@ -14,26 +14,23 @@ dependencies {
     implementation(libs.slimeloader)
 }
 
-tasks {
-    blossom {
-        val server = "src/main/java/com/github/selfcrafted/customlobby/Server.java"
-
-        replaceToken("&Name", displayName, server)
-        replaceToken("&version", version, server)
-        replaceToken("&minestomVersion", libs.versions.minestom.get(), server)
-    }
-
-    processResources {
-        filesMatching("start.sh") {
-            expand(
-                mapOf(
-                    "Name" to displayName,
-                    "version" to version
-                )
-            )
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("Name", displayName.toString())
+                property("version", version.toString())
+                property("minestomVersion", libs.versions.minestom.get())
+            }
+            resources {
+                property("Name", displayName.toString())
+                property("version", version.toString())
+            }
         }
     }
+}
 
+tasks {
     shadowJar {
         manifest {
             attributes("Main-Class" to "com.github.selfcrafted.customlobby.Server")
