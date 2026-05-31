@@ -34,31 +34,23 @@ Note that for compiling you need to use JDK 25.
 
 ## Usage
 To run the server you need to have Java 25 runtime installed.
-Use the following command to start the server for the first time.
+Use the following command to start the server.
 ```shell
 java -jar custom-lobby-<VERSION>.jar
 ```
-This generates a `start.sh` script and a settings file.
-The settings are located at `./config/custom-lobby.json` with these default values:
+The settings are located at `./custom-lobby.json` with these default values:
 ```json5
 {
   "SERVER_IP": "localhost",
   "SERVER_PORT": 25565,
   "MODE": "OFFLINE", // may be OFFLINE, ONLINE, BUNGEECORD or VELOCITY
-  "VELOCITY_SECRET": "",
-  "TERMINAL_DISABLED": false // default false
+  "VELOCITY_SECRET": ""
 }
 ```
 You have to restart the server for changes in there to take effect.
 
 Note that the newest version of this server only supports 26.1.1/26.1.2 clients.
 You may need to use ViaVersion on the proxy.
-
-## Restarting
-Restarting the server calls the `./start.sh` script.
-The generated script will restart the server with no way to access the console.
-So keep in mind that you will need an extension providing remote access or use tmux/screen in the `start.sh` to access the console.
-
 
 ## API
 This server itself does not add some API. But it features [Minestom's API](https://github.com/Minestom/Minestom) so you can use it from within extensions.

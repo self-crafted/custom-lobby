@@ -1,6 +1,5 @@
 package com.github.selfcrafted.customlobby;
 
-import com.github.selfcrafted.customlobby.commands.Commands;
 import net.hollowcube.polar.PolarLoader;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
@@ -11,7 +10,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.world.DimensionType;
@@ -19,14 +17,10 @@ import net.minestom.server.world.clock.WorldClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Objects;
 
 public class Server {
-    private static final String START_SCRIPT_FILENAME = "start.sh";
-
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
     private static final Logger serverLogger = LoggerFactory.getLogger(Server.class);
@@ -40,9 +34,6 @@ public class Server {
         System.setProperty("minestom.entity-view-distance", "2");
 
         Settings.read();
-        if (Settings.isTerminalDisabled()) {
-            System.setProperty("minestom.terminal.disabled", "");
-        }
 
         serverLogger.info("====== VERSIONS ======");
         serverLogger.info("Java: {}", Runtime.version());
@@ -52,17 +43,6 @@ public class Server {
         serverLogger.info("======================");
 
         if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
-
-        File startScriptFile = new File(START_SCRIPT_FILENAME);
-        if (!startScriptFile.exists()) {
-            serverLogger.info("Create startup script.");
-            Files.copy(
-                    Objects.requireNonNull(Server.class.getClassLoader().getResourceAsStream(START_SCRIPT_FILENAME)),
-                    startScriptFile.toPath());
-            new ProcessBuilder("chmod u+x start.sh").start();
-            serverLogger.info("Use './start.sh' to start the server.");
-            System.exit(0);
-        }
 
         // Initialise server
         Auth auth;
@@ -112,9 +92,6 @@ public class Server {
         eventNode.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerBeginItemUseEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerStartDiggingEvent.class, event -> event.setCancelled(true));
-
-        MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
-        MinecraftServer.getCommandManager().register(Commands.RESTART);
 
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());

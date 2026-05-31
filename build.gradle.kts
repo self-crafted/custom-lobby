@@ -24,10 +24,6 @@ sourceSets {
                 property("version", version.toString())
                 property("minestomVersion", libs.versions.minestom.get())
             }
-            resources {
-                property("Name", displayName)
-                property("version", version.toString())
-            }
         }
     }
 }

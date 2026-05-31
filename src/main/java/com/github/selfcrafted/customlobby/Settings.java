@@ -10,7 +10,7 @@ public class Settings {
             .setPrettyPrinting()
             .serializeNulls()
             .create();
-    private static final File settingsFile = new File("./config/custom-lobby.json");
+    private static final File settingsFile = new File("./custom-lobby.json");
 
     private static SettingsState currentSettings = null;
 
@@ -30,7 +30,6 @@ public class Settings {
 
     public static void write() throws IOException {
         String json = gson.toJson(currentSettings);
-        settingsFile.getParentFile().mkdirs();
         Writer writer = new FileWriter(settingsFile);
         writer.write(json);
         writer.close();
@@ -43,17 +42,12 @@ public class Settings {
         private final RunMode MODE;
         private final String VELOCITY_SECRET;
 
-        // JVM arguments
-        private final boolean TERMINAL_DISABLED;
-
         private SettingsState() {
             this.SERVER_IP = "localhost";
             this.SERVER_PORT = 25565;
 
             this.MODE = RunMode.OFFLINE;
             this.VELOCITY_SECRET = "";
-
-            this.TERMINAL_DISABLED = false;
         }
 
     }
@@ -94,6 +88,4 @@ public class Settings {
     public static String getVelocitySecret() {
         return currentSettings.VELOCITY_SECRET;
     }
-
-    public static boolean isTerminalDisabled() { return currentSettings.TERMINAL_DISABLED; }
 }
