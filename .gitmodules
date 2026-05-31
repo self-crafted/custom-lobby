@@ -1,0 +1,3 @@
+[submodule "world/converter"]
+	path = world/converter
+	url = git@github.com:BitByLogics/PolarConverter.git
