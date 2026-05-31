@@ -11,7 +11,9 @@ version = "1.1.0-SNAPSHOT"
 
 dependencies {
     implementation(libs.minestom)
-    implementation(libs.slf4j)
+    implementation(libs.polar)
+    implementation(libs.fastutil)
+    implementation(libs.bundles.logging)
 }
 
 sourceSets {

@@ -1,6 +1,7 @@
 package com.github.selfcrafted.customlobby;
 
 import com.github.selfcrafted.customlobby.commands.Commands;
+import net.hollowcube.polar.PolarLoader;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -84,31 +85,11 @@ public class Server {
         var fullBrightDimensionType = MinecraftServer.getDimensionTypeRegistry().register("self_crafted:lobby",
                 DimensionType.builder().ambientLight(2.0f).defaultClock(WorldClock.THE_END).build());
         LOBBY = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
-        LOBBY.setChunkLoader(new AnvilLoader("no")); // TODO: implement polar as slime is no longer working
+        LOBBY.setChunkLoader(new PolarLoader(Objects.requireNonNull(
+                Server.class.getResourceAsStream("/lobby.polar"), "Polar world missing!")));
 
         SPAWN = new Pos(84.8, 61.0, 84.0, -30.3F, 0.0F);
         LOBBY.setTime(-18000L);
-
-        // Fishing Steve
-        LivingEntity mannequin = new LivingEntity(EntityType.PLAYER);
-        mannequin.setInstance(LOBBY);
-        mannequin.setView(164.0F, 40.0F);
-        mannequin.setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
-        mannequin.setInvisible(false);
-        mannequin.setNoGravity(true);
-
-        // Seat
-        Entity seat = new Entity(EntityType.BAT);
-        seat.setInvisible(true);
-        seat.setNoGravity(true);
-        seat.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
-        seat.addPassenger(mannequin);
-
-        // Fishing hook
-        Entity hook = new Entity(EntityType.FISHING_BOBBER);
-        ((FishingHookMeta) hook.getEntityMeta()).setOwnerEntity(mannequin);
-        hook.setNoGravity(true);
-        hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
         eventNode.addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -138,5 +119,31 @@ public class Server {
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
         serverLogger.info("Listening on {}:{}", Settings.getServerIp(), Settings.getServerPort());
+
+        // Fishing Steve
+        LivingEntity mannequin = new LivingEntity(EntityType.MANNEQUIN);
+        mannequin.setView(164.0F, 40.0F);
+        mannequin.setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
+        mannequin.setInvisible(false);
+        mannequin.setNoGravity(true);
+        mannequin.setAutoViewable(true);
+        mannequin.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
+
+        // Seat
+        Entity seat = new Entity(EntityType.BAT);
+        seat.setInvisible(true);
+        seat.setNoGravity(true);
+        seat.setAutoViewable(true);
+        seat.setInstance(LOBBY, new Pos(91.0, 60.22, 89.1, 164.0F, 40.0F));
+        seat.addPassenger(mannequin);
+
+        // Fishing hook
+        Entity hook = new Entity(EntityType.FISHING_BOBBER);
+        hook.setInvisible(false);
+        hook.setNoGravity(true);
+        hook.setAutoViewable(true);
+        hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
+        hook.editEntityMeta(FishingHookMeta.class, meta -> meta.setOwnerEntity(mannequin));
+
     }
 }
