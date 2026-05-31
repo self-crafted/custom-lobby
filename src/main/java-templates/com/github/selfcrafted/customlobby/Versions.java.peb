@@ -1,0 +1,11 @@
+package com.github.selfcrafted.customlobby;
+
+public final class Versions {
+    private static final String VERSION = "{{ version }}";
+    private static final String MINESTOM = "{{ minestomVersion }}";
+    private static final String IMPLEMENTATION = "{{ Name }};
+
+    public static String version() { return VERSION };
+    public static String minestom() { return MINESTOM };
+    public static String implementation() { return IMPLEMENTATION };
+}

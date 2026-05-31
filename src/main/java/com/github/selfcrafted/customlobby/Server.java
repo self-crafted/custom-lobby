@@ -1,5 +1,6 @@
 package com.github.selfcrafted.customlobby;
 
+import com.github.selfcrafted.customlobby.Versions;
 import com.github.selfcrafted.customlobby.commands.Commands;
 import gg.astromc.slimeloader.loader.SlimeLoader;
 import gg.astromc.slimeloader.source.SlimeSource;
@@ -35,8 +36,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Server {
-    public static final String VERSION = "{{ version }}";
-    public static final String MINESTOM_VERSION = "{{ minestomVersion }}";
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     private static InstanceContainer LOBBY;
@@ -52,8 +51,8 @@ public class Server {
 
         MinecraftServer.LOGGER.info("====== VERSIONS ======");
         MinecraftServer.LOGGER.info("Java: " + Runtime.version());
-        MinecraftServer.LOGGER.info("{{ Name }}: " + VERSION);
-        MinecraftServer.LOGGER.info("Minestom: " + MINESTOM_VERSION);
+        MinecraftServer.LOGGER.info(Versions.implementation() + ": " + Versions.version());
+        MinecraftServer.LOGGER.info("Minestom: " + Versions.minestom());
         MinecraftServer.LOGGER.info("Supported protocol: %d (%s)".formatted(MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME));
         MinecraftServer.LOGGER.info("======================");
 
@@ -73,10 +72,8 @@ public class Server {
         // Initialise server
         MinecraftServer server = MinecraftServer.init();
 
-        var fullBrightDimensionType = DimensionType.builder(NamespaceID.from("selfcrafted:lobby"))
-                .ambientLight(2.0f)
-                .build();
-        MinecraftServer.getDimensionTypeManager().addDimension(fullBrightDimensionType);
+        var fullBrightDimensionType = MinecraftServer.getDimensionTypeRegistry()
+                .register("selfcrafted:lobby", DimensionType.builder().ambientLight(2.0f).build());
 
         // Create lobby instance
         LOBBY = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);

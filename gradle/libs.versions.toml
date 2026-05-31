@@ -2,7 +2,7 @@ metadata.format.version = "1.1"
 
 [versions]
 
-minestom = "1a013728fd"
+minestom = "2026.05.17c-26.1.1"
 slimeloader = "9f6bc4545a"
 
 # Gradle plugins
@@ -11,7 +11,7 @@ shadowJar = "9.4.2"
 
 [libraries]
 
-minestom = { group = "com.github.Minestom", name = "Minestom", version.ref = "minestom" }
+minestom = { group = "net.minestom", name = "minestom", version.ref = "minestom" }
 slimeloader = { group = "com.github.CatDevz", name = "SlimeLoader", version.ref = "slimeloader" }
 
 [bundles]
