@@ -34,7 +34,7 @@ public class Server {
         return serverLogger;
     }
 
-    public static void main(String[] args) throws IOException {
+    static void main(String[] args) throws IOException {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
 
@@ -138,19 +138,5 @@ public class Server {
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
         serverLogger.info("Listening on {}:{}", Settings.getServerIp(), Settings.getServerPort());
-    }
-
-    /**
-     * @return The InstanceContainer of the lobby instance
-     */
-    public static InstanceContainer lobby() {
-        return LOBBY;
-    }
-
-    /**
-     * @return The spawn point for all players in the lobby
-     */
-    public static Pos spawn() {
-        return SPAWN;
     }
 }
