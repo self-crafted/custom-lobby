@@ -7,7 +7,7 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/self-crafted/custom-lobby?style=flat-square)](https://github.com/self-crafted/custom-lobby/releases/latest)
 [![GitHub all releases](https://img.shields.io/github/downloads/self-crafted/custom-lobby/total?style=flat-square)](https://github.com/self-crafted/custom-lobby/releases)
 
-custom-lobby is a small minecraft lobby server with [Minestom](https://github.com/Minestom/Minestom) as its core.
+custom-lobby is a small Minecraft lobby server with [Minestom](https://github.com/Minestom/Minestom) as its core.
 
 custom-lobby is built for my private network, so it may or may not fit your needs.
 It includes a map, got only one instance and small gimmicks just for fun.
@@ -30,10 +30,10 @@ cd custom-lobby
 ```
 The server jar will be located at `build/libs/custom-lobby-<VERSION>.jar`.
 
-Note that for compiling you need to use a JDK 17.
+Note that for compiling you need to use JDK 25.
 
 ## Usage
-To run the server you need to have a Java 17 runtime installed.
+To run the server you need to have Java 25 runtime installed.
 Use the following command to start the server for the first time.
 ```shell
 java -jar custom-lobby-<VERSION>.jar
@@ -51,7 +51,7 @@ The settings are located at `./config/custom-lobby.json` with these default valu
 ```
 You have to restart the server for changes in there to take effect.
 
-Note that the newest version of this server only supports 1.19.2 clients.
+Note that the newest version of this server only supports 26.1.1/26.1.2 clients.
 You may need to use ViaVersion on the proxy.
 
 ## Restarting
