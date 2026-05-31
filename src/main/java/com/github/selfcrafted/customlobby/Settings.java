@@ -23,7 +23,7 @@ public class Settings {
             try {
                 write();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Server.logger().error("Could not create settings file.", ex);
             }
         }
     }

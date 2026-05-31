@@ -11,19 +11,19 @@ version = "1.1.0-SNAPSHOT"
 
 dependencies {
     implementation(libs.minestom)
-    implementation(libs.slimeloader)
+    implementation(libs.slf4j)
 }
 
 sourceSets {
     main {
         blossom {
             javaSources {
-                property("Name", displayName.toString())
+                property("Name", displayName)
                 property("version", version.toString())
                 property("minestomVersion", libs.versions.minestom.get())
             }
             resources {
-                property("Name", displayName.toString())
+                property("Name", displayName)
                 property("version", version.toString())
             }
         }

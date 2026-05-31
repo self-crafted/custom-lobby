@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 minestom = "2026.05.17c-26.1.1"
-slimeloader = "9f6bc4545a"
+slf4j = "2.0.18"
 
 # Gradle plugins
 blossom = "2.2.0"
@@ -12,7 +12,7 @@ shadowJar = "9.4.2"
 [libraries]
 
 minestom = { group = "net.minestom", name = "minestom", version.ref = "minestom" }
-slimeloader = { group = "com.github.CatDevz", name = "SlimeLoader", version.ref = "slimeloader" }
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
 [bundles]
 

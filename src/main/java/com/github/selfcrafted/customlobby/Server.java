@@ -1,134 +1,123 @@
 package com.github.selfcrafted.customlobby;
 
-import com.github.selfcrafted.customlobby.Versions;
 import com.github.selfcrafted.customlobby.commands.Commands;
-import gg.astromc.slimeloader.loader.SlimeLoader;
-import gg.astromc.slimeloader.source.SlimeSource;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.fakeplayer.FakePlayerOption;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.metadata.other.FishingHookMeta;
 import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.extras.bungee.BungeeCordProxy;
-import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.TeamsPacket;
-import net.minestom.server.scoreboard.TeamBuilder;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.world.clock.WorldClock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Server {
     private static final String START_SCRIPT_FILENAME = "start.sh";
 
     private static InstanceContainer LOBBY;
     private static Pos SPAWN;
+    private static final Logger serverLogger = LoggerFactory.getLogger(Server.class);
+
+    public static Logger logger() {
+        return serverLogger;
+    }
 
     public static void main(String[] args) throws IOException {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
 
         Settings.read();
-        if (Settings.isTerminalDisabled())
+        if (Settings.isTerminalDisabled()) {
             System.setProperty("minestom.terminal.disabled", "");
+        }
 
-        MinecraftServer.LOGGER.info("====== VERSIONS ======");
-        MinecraftServer.LOGGER.info("Java: " + Runtime.version());
-        MinecraftServer.LOGGER.info(Versions.implementation() + ": " + Versions.version());
-        MinecraftServer.LOGGER.info("Minestom: " + Versions.minestom());
-        MinecraftServer.LOGGER.info("Supported protocol: %d (%s)".formatted(MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME));
-        MinecraftServer.LOGGER.info("======================");
+        serverLogger.info("====== VERSIONS ======");
+        serverLogger.info("Java: {}", Runtime.version());
+        serverLogger.info("{}: {}", Versions.implementation(), Versions.version());
+        serverLogger.info("Minestom: {}", Versions.minestom());
+        serverLogger.info("Supported protocol: {} ({})", MinecraftServer.PROTOCOL_VERSION, MinecraftServer.VERSION_NAME);
+        serverLogger.info("======================");
 
         if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
 
         File startScriptFile = new File(START_SCRIPT_FILENAME);
         if (!startScriptFile.exists()) {
-            MinecraftServer.LOGGER.info("Create startup script.");
+            serverLogger.info("Create startup script.");
             Files.copy(
                     Objects.requireNonNull(Server.class.getClassLoader().getResourceAsStream(START_SCRIPT_FILENAME)),
                     startScriptFile.toPath());
-            Runtime.getRuntime().exec("chmod u+x start.sh");
-            MinecraftServer.LOGGER.info("Use './start.sh' to start the server.");
+            new ProcessBuilder("chmod u+x start.sh").start();
+            serverLogger.info("Use './start.sh' to start the server.");
             System.exit(0);
         }
 
         // Initialise server
-        MinecraftServer server = MinecraftServer.init();
+        Auth auth;
+        switch (Settings.getMode()) {
+            case OFFLINE -> auth = new Auth.Offline();
+            case ONLINE -> auth = new Auth.Online();
+            case BUNGEECORD -> auth = new Auth.Bungee();
+            case VELOCITY -> {
+                if (!Settings.hasVelocitySecret())
+                    throw new IllegalArgumentException("The velocity secret is mandatory.");
+                auth = new Auth.Velocity(Settings.getVelocitySecret());
+            }
+            default -> throw new IllegalArgumentException("Invalid authentication mode value."); // TODO: check in Settings instead of here
+        }
 
-        var fullBrightDimensionType = MinecraftServer.getDimensionTypeRegistry()
-                .register("selfcrafted:lobby", DimensionType.builder().ambientLight(2.0f).build());
+        MinecraftServer server = MinecraftServer.init(auth);
+        serverLogger.info("Running in {} mode.", Settings.getMode());
 
         // Create lobby instance
+        var fullBrightDimensionType = MinecraftServer.getDimensionTypeRegistry().register("self_crafted:lobby",
+                DimensionType.builder().ambientLight(2.0f).defaultClock(WorldClock.THE_END).build());
         LOBBY = MinecraftServer.getInstanceManager().createInstanceContainer(fullBrightDimensionType);
-        LOBBY.setChunkLoader(new SlimeLoader(LOBBY, new SlimeSource() {
-            @NotNull
-            @Override
-            public InputStream load() {
-                return Objects.requireNonNull(getClass().getResourceAsStream("/lobby.slime"),
-                        "Slime world missing!");
-            }
-
-            @NotNull
-            @Override
-            public OutputStream save() {
-                return null;
-            }
-        }, true));
+        LOBBY.setChunkLoader(new AnvilLoader("no")); // TODO: implement polar as slime is no longer working
 
         SPAWN = new Pos(84.8, 61.0, 84.0, -30.3F, 0.0F);
-        LOBBY.setTimeRate(0);
         LOBBY.setTime(-18000L);
 
-        FakePlayer.initPlayer(UUID.fromString("00000000-0000-4000-8000-000000000000"), "Fishing Steve",
-                new FakePlayerOption().setInTabList(false).setRegistered(false),
-                player -> {
-                    // Fishing Steve
-                    var team = new TeamBuilder("noNames", MinecraftServer.getTeamManager())
-                            .nameTagVisibility(TeamsPacket.NameTagVisibility.NEVER).build();
-                    player.setTeam(team);
-                    player.setView(164.0F, 40.0F);
-                    player.getInventory().setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
+        // Fishing Steve
+        LivingEntity mannequin = new LivingEntity(EntityType.PLAYER);
+        mannequin.setInstance(LOBBY);
+        mannequin.setView(164.0F, 40.0F);
+        mannequin.setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
+        mannequin.setInvisible(false);
+        mannequin.setNoGravity(true);
 
-                    // Seat
-                    Entity seat = new Entity(EntityType.BAT);
-                    seat.getEntityMeta().setInvisible(true);
-                    seat.getEntityMeta().setHasNoGravity(true);
-                    seat.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
-                    seat.addPassenger(player);
+        // Seat
+        Entity seat = new Entity(EntityType.BAT);
+        seat.setInvisible(true);
+        seat.setNoGravity(true);
+        seat.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
+        seat.addPassenger(mannequin);
 
-                    // Fishing hook
-                    Entity hook = new Entity(EntityType.FISHING_BOBBER);
-                    ((FishingHookMeta) hook.getEntityMeta()).setOwnerEntity(player);
-                    hook.setNoGravity(true);
-                    hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
-                });
+        // Fishing hook
+        Entity hook = new Entity(EntityType.FISHING_BOBBER);
+        ((FishingHookMeta) hook.getEntityMeta()).setOwnerEntity(mannequin);
+        hook.setNoGravity(true);
+        hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
-        eventNode.addListener(PlayerLoginEvent.class, event -> {
+        eventNode.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(LOBBY);
             event.getPlayer().setRespawnPoint(SPAWN);
         });
         eventNode.addListener(PlayerSpawnEvent.class, event -> {
             var player = event.getPlayer();
-            if (event.getSpawnInstance() != LOBBY) return;
-            if (player instanceof FakePlayer) return;
+            if (event.getInstance() != LOBBY) return;
             player.setGameMode(GameMode.ADVENTURE);
             player.setNoGravity(false);
         });
@@ -140,29 +129,15 @@ public class Server {
 
         eventNode.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
-        eventNode.addListener(PlayerPreEatEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(PlayerBeginItemUseEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerStartDiggingEvent.class, event -> event.setCancelled(true));
 
         MinecraftServer.getCommandManager().register(Commands.SHUTDOWN);
         MinecraftServer.getCommandManager().register(Commands.RESTART);
-        MinecraftServer.getExtensionManager().setExtensionDataRoot(Path.of("config"));
-
-        switch (Settings.getMode()) {
-            case OFFLINE -> {}
-            case ONLINE -> MojangAuth.init();
-            case BUNGEECORD -> BungeeCordProxy.enable();
-            case VELOCITY -> {
-                if (!Settings.hasVelocitySecret())
-                    throw new IllegalArgumentException("The velocity secret is mandatory.");
-                VelocityProxy.enable(Settings.getVelocitySecret());
-            }
-        }
-
-        MinecraftServer.LOGGER.info("Running in " + Settings.getMode() + " mode.");
-        MinecraftServer.LOGGER.info("Listening on " + Settings.getServerIp() + ":" + Settings.getServerPort());
 
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
+        serverLogger.info("Listening on {}:{}", Settings.getServerIp(), Settings.getServerPort());
     }
 
     /**
