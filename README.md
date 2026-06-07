@@ -38,7 +38,7 @@ Use the following command to start the server.
 ```shell
 java -jar custom-lobby-<VERSION>.jar
 ```
-The settings are located at `./custom-lobby.json` with these default values:
+The settings are located at `./config.json` with these default values:
 ```json5
 {
   "SERVER_IP": "localhost",

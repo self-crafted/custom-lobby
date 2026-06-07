@@ -10,7 +10,7 @@ public class Settings {
             .setPrettyPrinting()
             .serializeNulls()
             .create();
-    private static final File settingsFile = new File("./custom-lobby.json");
+    private static final File settingsFile = new File("./config.json");
 
     private static SettingsState currentSettings = null;
 
