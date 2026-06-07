@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Set;
 
 public class Server {
     private static InstanceContainer LOBBY;
@@ -33,8 +34,6 @@ public class Server {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
 
-        Settings.read();
-
         serverLogger.info("====== VERSIONS ======");
         serverLogger.info("Java: {}", Runtime.version());
         serverLogger.info("{}: {}", Versions.implementation(), Versions.version());
@@ -44,18 +43,18 @@ public class Server {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("-v")) System.exit(0);
 
+        Settings.read();
+
         // Initialise server
-        Auth auth;
+        Auth auth = null;
         switch (Settings.getMode()) {
             case OFFLINE -> auth = new Auth.Offline();
             case ONLINE -> auth = new Auth.Online();
-            case BUNGEECORD -> auth = new Auth.Bungee();
-            case VELOCITY -> {
-                if (!Settings.hasVelocitySecret())
-                    throw new IllegalArgumentException("The velocity secret is mandatory.");
-                auth = new Auth.Velocity(Settings.getVelocitySecret());
+            case BUNGEECORD -> {
+                if (!Settings.hasSecret()) auth = new Auth.Bungee();
+                else auth = new Auth.Bungee(Set.of(Settings.getSecret()));
             }
-            default -> throw new IllegalArgumentException("Invalid authentication mode value."); // TODO: check in Settings instead of here
+            case VELOCITY -> auth = new Auth.Velocity(Settings.getSecret());
         }
 
         MinecraftServer server = MinecraftServer.init(auth);

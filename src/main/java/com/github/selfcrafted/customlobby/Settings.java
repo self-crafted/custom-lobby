@@ -26,6 +26,8 @@ public class Settings {
                 Server.logger().error("Could not create settings file.", ex);
             }
         }
+        if (currentSettings.MODE == RunMode.VELOCITY && currentSettings.SECRET.isBlank())
+            throw new IllegalArgumentException("The velocity secret is mandatory.");
     }
 
     public static void write() throws IOException {
@@ -40,14 +42,14 @@ public class Settings {
         private final int SERVER_PORT;
 
         private final RunMode MODE;
-        private final String VELOCITY_SECRET;
+        private final String SECRET;
 
         private SettingsState() {
             this.SERVER_IP = "localhost";
             this.SERVER_PORT = 25565;
 
             this.MODE = RunMode.OFFLINE;
-            this.VELOCITY_SECRET = "";
+            this.SECRET = "";
         }
 
     }
@@ -81,11 +83,11 @@ public class Settings {
         return port;
     }
 
-    public static boolean hasVelocitySecret() {
-        return !currentSettings.VELOCITY_SECRET.isBlank();
+    public static boolean hasSecret() {
+        return !currentSettings.SECRET.isBlank();
     }
 
-    public static String getVelocitySecret() {
-        return currentSettings.VELOCITY_SECRET;
+    public static String getSecret() {
+        return currentSettings.SECRET;
     }
 }
