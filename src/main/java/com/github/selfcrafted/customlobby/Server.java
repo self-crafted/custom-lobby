@@ -1,5 +1,6 @@
 package com.github.selfcrafted.customlobby;
 
+import com.github.selfcrafted.customlobby.menu.MenuInventory;
 import net.hollowcube.polar.PolarLoader;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.Auth;
@@ -7,16 +8,14 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.metadata.other.FishingHookMeta;
-import net.minestom.server.event.EventListener;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
-import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +28,13 @@ public class Server {
     private static Pos SPAWN;
     private static final Logger serverLogger = LoggerFactory.getLogger(Server.class);
 
+    private static MenuInventory menuInventory;
+
     public static Logger logger() {
         return serverLogger;
     }
 
-    static void main(String[] args) throws IOException {
+    static void main(String[] args) throws IOException, InterruptedException {
         System.setProperty("minestom.chunk-view-distance", "2");
         System.setProperty("minestom.entity-view-distance", "2");
 
@@ -79,54 +80,6 @@ public class Server {
         LOBBY.setTime(-18000L);
 
         var eventNode = MinecraftServer.getGlobalEventHandler();
-        EventListener<AsyncPlayerPreLoginEvent> firstLoginListener = new EventListener<>() {
-            @Override
-            public @NonNull Class<AsyncPlayerPreLoginEvent> eventType() {
-                return AsyncPlayerPreLoginEvent.class;
-            }
-
-            @Override
-            public @NonNull Result run(@NonNull AsyncPlayerPreLoginEvent event) {
-                eventNode.removeListener(this);
-
-                // Fishing Steve
-                LivingEntity mannequin = new LivingEntity(EntityType.MANNEQUIN);
-                mannequin.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
-                mannequin.setView(164.0F, 40.0F);
-                mannequin.setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
-                mannequin.setInvisible(false);
-                mannequin.setNoGravity(true);
-                mannequin.setAutoViewable(true);
-
-                // Seat
-                Entity seat = new Entity(EntityType.BAT);
-                seat.setInstance(LOBBY, new Pos(91.0, 60.15, 89.1, 164.0F, 40.0F));
-                seat.setInvisible(true);
-                seat.setNoGravity(true);
-                seat.setAutoViewable(true);
-                seat.addPassenger(mannequin);
-
-                // Fishing hook
-                Entity hook = new Entity(EntityType.FISHING_BOBBER);
-                hook.editEntityMeta(FishingHookMeta.class, meta -> meta.setOwnerEntity(mannequin));
-                hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
-                hook.setInvisible(false);
-                hook.setAutoViewable(true);
-                hook.spawn();
-
-                // Hook holder
-                Entity bobberHolder = new Entity(EntityType.BAT);
-                bobberHolder.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
-                bobberHolder.setInvisible(true);
-                bobberHolder.setNoGravity(true);
-                bobberHolder.setAutoViewable(true);
-                bobberHolder.addPassenger(hook);
-
-                return Result.SUCCESS;
-            }
-        };
-
-        eventNode.addListener(firstLoginListener);
         eventNode.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(LOBBY);
             event.getPlayer().setRespawnPoint(SPAWN);
@@ -136,6 +89,8 @@ public class Server {
             if (event.getInstance() != LOBBY) return;
             player.setGameMode(GameMode.ADVENTURE);
             player.setNoGravity(false);
+            player.getInventory().setItemStack(4, menuInventory.getOpener());
+            player.setHeldItemSlot((byte) 4);
         });
         eventNode.addListener(PlayerMoveEvent.class, event -> {
             var player = event.getPlayer();
@@ -145,11 +100,50 @@ public class Server {
 
         eventNode.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
-        eventNode.addListener(PlayerBeginItemUseEvent.class, event -> event.setCancelled(true));
         eventNode.addListener(PlayerStartDiggingEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(InventoryPreClickEvent.class, event -> event.setCancelled(true));
+        eventNode.addListener(PlayerUseItemEvent.class, event -> {
+            event.setCancelled(true);
+            if (event.getItemStack() == menuInventory.getOpener()) event.getPlayer().openInventory(menuInventory);
+        });
 
         // Start server
         server.start(Settings.getServerIp(), Settings.getServerPort());
         serverLogger.info("Listening on {}:{}", Settings.getServerIp(), Settings.getServerPort());
+
+        menuInventory = new MenuInventory();
+
+        // Fishing Steve
+        LivingEntity mannequin = new LivingEntity(EntityType.MANNEQUIN);
+        mannequin.setInstance(LOBBY, new Pos(91.0, 60.45, 89.1, 164.0F, 40.0F));
+        mannequin.setView(164.0F, 40.0F);
+        mannequin.setItemInMainHand(ItemStack.of(Material.FISHING_ROD));
+        mannequin.setInvisible(false);
+        mannequin.setNoGravity(true);
+        mannequin.setAutoViewable(true);
+
+        // Seat
+        Entity seat = new Entity(EntityType.BAT);
+        seat.setInstance(LOBBY, new Pos(91.0, 60.15, 89.1, 164.0F, 40.0F));
+        seat.setInvisible(true);
+        seat.setNoGravity(true);
+        seat.setAutoViewable(true);
+        seat.addPassenger(mannequin);
+
+        // Fishing hook
+        Entity hook = new Entity(EntityType.FISHING_BOBBER);
+        hook.editEntityMeta(FishingHookMeta.class, meta -> meta.setOwnerEntity(mannequin));
+        hook.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
+        hook.setInvisible(false);
+        hook.setAutoViewable(true);
+        hook.spawn();
+
+        // Hook holder
+        Entity bobberHolder = new Entity(EntityType.BAT);
+        bobberHolder.setInstance(LOBBY, new Pos(90.5, 60.875, 87.5));
+        bobberHolder.setInvisible(true);
+        bobberHolder.setNoGravity(true);
+        bobberHolder.setAutoViewable(true);
+        bobberHolder.addPassenger(hook);
     }
 }
