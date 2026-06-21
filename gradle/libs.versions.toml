@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 minestom = "2026.05.17c-26.1.1"
-polar = "1.15.1"
+polar = "1.16.0"
 fastutil = "8.5.15"
 slf4j = "2.0.18"
 tinylog = "2.7.0"
