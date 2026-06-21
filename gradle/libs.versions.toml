@@ -2,11 +2,13 @@ metadata.format.version = "1.1"
 
 [versions]
 
-minestom = "2026.05.17c-26.1.1"
+minestom = "2026.06.05-26.1.2"
 polar = "1.16.0"
 fastutil = "8.5.18"
 slf4j = "2.0.18"
 tinylog = "2.7.0"
+
+minimessage = "5.1.1"
 
 # Gradle plugins
 blossom = "2.2.0"
@@ -21,9 +23,12 @@ slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 slf4j-tinylog = { group = "org.tinylog", name = "slf4j-tinylog", version.ref = "tinylog" }
 tinylog-impl = { group = "org.tinylog", name = "tinylog-impl", version.ref = "tinylog" }
 
+minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "minimessage" }
+
 [bundles]
 
 logging = ["slf4j", "slf4j-tinylog", "tinylog-impl"]
+world = ["polar", "fastutil"]
 
 [plugins]
 

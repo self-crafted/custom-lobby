@@ -11,8 +11,8 @@ version = "2.0.0-SNAPSHOT"
 
 dependencies {
     implementation(libs.minestom)
-    implementation(libs.polar)
-    implementation(libs.fastutil)
+    implementation(libs.minimessage)
+    implementation(libs.bundles.world)
     implementation(libs.bundles.logging)
 }
 
