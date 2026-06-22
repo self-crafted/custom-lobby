@@ -2,7 +2,7 @@ metadata.format.version = "1.1"
 
 [versions]
 
-minestom = "2026.06.05-26.1.2"
+minestom = "2026.06.20-26.1.2"
 polar = "1.16.0"
 fastutil = "8.5.18"
 slf4j = "2.0.18"
