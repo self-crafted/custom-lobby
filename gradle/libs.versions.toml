@@ -8,7 +8,7 @@ fastutil = "8.5.18"
 slf4j = "2.0.18"
 tinylog = "2.7.0"
 
-minimessage = "5.1.1"
+minimessage = "5.2.0"
 
 # Gradle plugins
 blossom = "2.2.0"
