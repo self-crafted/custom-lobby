@@ -12,7 +12,7 @@ minimessage = "5.2.0"
 
 # Gradle plugins
 blossom = "2.2.0"
-shadowJar = "9.4.3"
+shadowJar = "9.6.0"
 
 [libraries]
 
