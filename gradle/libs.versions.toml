@@ -6,7 +6,7 @@ minestom = "2026.08.07-26.2"
 polar = "1.16.0"
 fastutil = "8.5.19"
 slf4j = "2.0.18"
-tinylog = "2.7.0"
+tinylog = "2.8.0"
 
 minimessage = "5.2.0"
 
